@@ -1,7 +1,25 @@
 {
-    "login": 
-        {"token": "s9d87csd9f798da7ds97ds89d78a9sd789d798", "user":{
-            "userName": "Eduardo Burko",
-            "userEmail": "edu@edu.com"
-        }}
+  "login": {
+    "token": "s9d87csd9f798da7ds97ds89d78a9sd789d798",
+    "user": {
+      "userName": "Eduardo Burko",
+      "userEmail": "edu@edu.com"
+    }
+  },
+  "user": [
+    {
+      "username": "@eduardo",
+      "name": "Eduardo Burko",
+      "email": "dudu@dudu.com",
+      "password": "dasjdksdjasdjaps",
+      "id": 1
+    },
+    {
+      "username": "@phantodev",
+      "password": "12345678",
+      "name": "Dudu Burko",
+      "email": "dudu@dudu.com",
+      "id": 2
+    }
+  ]
 }

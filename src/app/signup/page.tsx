@@ -3,8 +3,7 @@
 import 'react-toastify/dist/ReactToastify.css'
 import { ToastContainer, toast } from 'react-toastify'
 import { Button, Input } from '@nextui-org/react'
-// import { useActionState } from 'react'
-import { login } from '@/app/actions/actions'
+import { signup } from '@/app/actions/actions'
 import { useForm, SubmitHandler } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
@@ -14,51 +13,54 @@ import { useRouter } from 'next/navigation'
 const schema = z.object({
   username: z.string().min(5, { message: 'Usuário inválido' }),
   password: z.string().min(5, { message: 'Senha inválida' }),
+  name: z.string().min(5, { message: 'Mínimo 5 caracteres' }),
+  email: z.string().email({ message: 'E-mail inválido' }),
 })
 
-export type Inputs = z.infer<typeof schema>
+export type InputsSignup = z.infer<typeof schema>
 
-export default function LoginPage() {
+export default function SignupPage() {
   const [isLoading, setIsLoading] = React.useState<boolean>(false)
   const router = useRouter()
+
+  /* This code snippet is using the `useForm` hook from the `react-hook-form` library to handle form
+  validation and submission in a React component. Let's break down what each part of this code is
+  doing: */
   const {
     register,
     handleSubmit,
-    setError,
     formState: { errors },
-  } = useForm<Inputs>({
+  } = useForm<InputsSignup>({
     resolver: zodResolver(schema),
   })
 
-  const onSubmit: SubmitHandler<Inputs> = async (data) => {
+  /**
+   * The function onSubmit handles form submission for signing up a user, displaying an error message if
+   * the signup fails.
+   * @param data - The `data` parameter in the `onSubmit` function likely contains the form inputs
+   * submitted by the user for signing up. These inputs could include information such as the user's
+   * name, email, password, and any other required details for creating a new account. The `signup`
+   * function is then called
+   */
+  const onSubmit: SubmitHandler<InputsSignup> = async (data) => {
     try {
       setIsLoading(true)
-      const response = await login(data)
-      console.log(response)
+      await signup(data)
       setIsLoading(false)
-      router.push('/admin/customers')
+      router.push('/')
     } catch (error) {
-      console.log(error)
       setIsLoading(false)
-      setError('username', { type: 'manual', message: 'Credenciais inválidas' })
-      setError('password', { type: 'manual', message: 'Credenciais inválidas' })
-      toast.error('Credenciais inválidas')
+      toast.error('Não foi possivel cadastrar')
     }
   }
-
-  // React.useEffect(() => {
-  //   if (errors.password) {
-  //     toast.error('Senha inválida')
-  //   }
-  //   if (errors.username) {
-  //     toast.error('Usuário inválido')
-  //   }
-  // }, [errors])
 
   return (
     <main className="flex h-screen w-screen items-center justify-center">
       <section className="w-[500px] rounded-lg bg-gray-300 p-10">
-        <section className="mb-4 text-2xl font-bold"> Página do Login</section>
+        <section className="mb-4 text-2xl font-bold">
+          {' '}
+          Página de Cadastro
+        </section>
         <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4">
           <Input
             isInvalid={!!errors.username}
@@ -69,6 +71,22 @@ export default function LoginPage() {
             {...register('username', { required: true })}
           />
           <Input
+            isInvalid={!!errors.name}
+            errorMessage={errors.name?.message}
+            type="text"
+            label="Nome"
+            placeholder="Digite seu nome"
+            {...register('name', { required: true })}
+          />
+          <Input
+            isInvalid={!!errors.email}
+            errorMessage={errors.email?.message}
+            type="text"
+            label="E-mail"
+            placeholder="Digite seu e-mail"
+            {...register('email', { required: true })}
+          />
+          <Input
             isInvalid={!!errors.password}
             errorMessage={errors.password?.message}
             type="password"
@@ -76,9 +94,6 @@ export default function LoginPage() {
             placeholder="Digite sua senha"
             {...register('password', { required: true })}
           />
-          {/* <section className="font-semibold text-red-500">
-            {state?.message}
-          </section> */}
           <Button
             size="lg"
             isLoading={isLoading}
@@ -86,7 +101,7 @@ export default function LoginPage() {
             color="primary"
             fullWidth
           >
-            {!isLoading ? 'Login' : ''}
+            {!isLoading ? 'Cadastrar' : ''}
           </Button>
         </form>
         <Button
@@ -95,9 +110,9 @@ export default function LoginPage() {
           variant="light"
           fullWidth
           className="mt-4"
-          onClick={() => router.push('/signup')}
+          onClick={() => router.push('/')}
         >
-          Não tem cadastro ainda, clique aqui
+          Voltar para login
         </Button>
       </section>
       <ToastContainer />

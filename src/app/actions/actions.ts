@@ -2,6 +2,7 @@
 
 'use server'
 
+import postgres from 'postgres'
 import { Inputs } from '../page'
 import { InputsSignup } from '../signup/page'
 
@@ -34,4 +35,22 @@ export async function signup(data: InputsSignup) {
   })
   const json = await res.json()
   return json
+}
+
+export async function signupWithPostgres(data: InputsSignup) {
+  const sql = postgres(process.env.POSTGRES_URL!, {
+    ssl: 'allow',
+  })
+
+  try {
+    await sql`
+  INSERT INTO users (username, email, name, password)
+  VALUES (${data.username}, ${data.email}, ${data.name}, ${data.password})
+`
+
+    return 'Usuário inserido com sucesso'
+  } catch (e) {
+    console.log(e)
+    return 'Problemas ao inserir usuário'
+  }
 }

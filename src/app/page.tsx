@@ -36,7 +36,7 @@ export default function LoginPage() {
       const response = await login(data)
       console.log(response)
       setIsLoading(false)
-      router.push('/admin/customers')
+      router.push('/admin/')
     } catch (error) {
       console.log(error)
       setIsLoading(false)

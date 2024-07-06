@@ -3,7 +3,8 @@
 import 'react-toastify/dist/ReactToastify.css'
 import { ToastContainer, toast } from 'react-toastify'
 import { Button, Input } from '@nextui-org/react'
-import { signup } from '@/app/actions/actions'
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import { signup, signupWithPostgres } from '@/app/actions/actions'
 import { useForm, SubmitHandler } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
@@ -45,9 +46,15 @@ export default function SignupPage() {
   const onSubmit: SubmitHandler<InputsSignup> = async (data) => {
     try {
       setIsLoading(true)
-      await signup(data)
+      // await signup(data)
+      await signupWithPostgres(data)
+      toast.success('Cadastro  efetuado. Faça login!', {
+        theme: 'colored',
+        onClose: () => {
+          router.push('/')
+        },
+      })
       setIsLoading(false)
-      router.push('/')
     } catch (error) {
       setIsLoading(false)
       toast.error('Não foi possivel cadastrar')

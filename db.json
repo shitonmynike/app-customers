@@ -23,25 +23,95 @@
     }
   ],
   "customers": [
-    { "id": 1, "name": "João da Silva", "role": "Gerente", "status": "Ativo" },
-    { "id": 2, "name": "Maria Oliveira", "role": "Analista", "status": "Ativo" },
-    { "id": 3, "name": "José Santos", "role": "Coordenador", "status": "Inativo" },
-    { "id": 4, "name": "Ana Souza", "role": "Especialista", "status": "Ativo" },
-    { "id": 5, "name": "Carlos Pereira", "role": "Analista", "status": "Inativo" },
-    { "id": 6, "name": "Mariana Costa", "role": "Diretor", "status": "Ativo" },
-    { "id": 7, "name": "Rafael Lima", "role": "Consultor", "status": "Ativo" },
-    { "id": 8, "name": "Juliana Almeida", "role": "Gerente", "status": "Inativo" },
-    { "id": 9, "name": "Paulo Vieira", "role": "Analista", "status": "Ativo" },
-    { "id": 10, "name": "Fernanda Rocha", "role": "Coordenador", "status": "Ativo" },
-    { "id": 11, "name": "Lucas Santos", "role": "Especialista", "status": "Inativo" },
-    { "id": 12, "name": "Isabela Fernandes", "role": "Analista", "status": "Ativo" },
-    { "id": 13, "name": "Gustavo Oliveira", "role": "Gerente", "status": "Ativo" },
-    { "id": 14, "name": "Camila Souza", "role": "Analista", "status": "Inativo" },
-    { "id": 15, "name": "Rodrigo Costa", "role": "Diretor", "status": "Ativo" },
-    { "id": 16, "name": "Amanda Lima", "role": "Consultor", "status": "Ativo" },
-    { "id": 17, "name": "Thiago Almeida", "role": "Gerente", "status": "Inativo" },
-    { "id": 18, "name": "Patrícia Vieira", "role": "Analista", "status": "Ativo" },
-    { "id": 19, "name": "Gabriela Rocha", "role": "Coordenador", "status": "Ativo" },
-    { "id": 20, "name": "Felipe Santos", "role": "Especialista", "status": "Inativo" }
+    {
+      "id": 6,
+      "name": "Mariana Costa",
+      "role": "Diretor",
+      "status": "Ativo"
+    },
+    {
+      "id": 7,
+      "name": "Rafael Lima",
+      "role": "Consultor",
+      "status": "Ativo"
+    },
+    {
+      "id": 8,
+      "name": "Juliana Almeida",
+      "role": "Gerente",
+      "status": "Inativo"
+    },
+    {
+      "id": 9,
+      "name": "Paulo Vieira",
+      "role": "Analista",
+      "status": "Ativo"
+    },
+    {
+      "id": 10,
+      "name": "Fernanda Rocha",
+      "role": "Coordenador",
+      "status": "Ativo"
+    },
+    {
+      "id": 11,
+      "name": "Lucas Santos",
+      "role": "Especialista",
+      "status": "Inativo"
+    },
+    {
+      "id": 12,
+      "name": "Isabela Fernandes",
+      "role": "Analista",
+      "status": "Ativo"
+    },
+    {
+      "id": 13,
+      "name": "Gustavo Oliveira",
+      "role": "Gerente",
+      "status": "Ativo"
+    },
+    {
+      "id": 14,
+      "name": "Camila Souza",
+      "role": "Analista",
+      "status": "Inativo"
+    },
+    {
+      "id": 15,
+      "name": "Rodrigo Costa",
+      "role": "Diretor",
+      "status": "Ativo"
+    },
+    {
+      "id": 16,
+      "name": "Amanda Lima",
+      "role": "Consultor",
+      "status": "Ativo"
+    },
+    {
+      "id": 17,
+      "name": "Thiago Almeida",
+      "role": "Gerente",
+      "status": "Inativo"
+    },
+    {
+      "id": 18,
+      "name": "Patrícia Vieira",
+      "role": "Analista",
+      "status": "Ativo"
+    },
+    {
+      "id": 19,
+      "name": "Gabriela Rocha",
+      "role": "Coordenador",
+      "status": "Ativo"
+    },
+    {
+      "id": 20,
+      "name": "Felipe Santos",
+      "role": "Especialista",
+      "status": "Inativo"
+    }
   ]
 }

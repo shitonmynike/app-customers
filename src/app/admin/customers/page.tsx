@@ -1,6 +1,8 @@
 'use client'
 import React from 'react'
+import 'react-toastify/dist/ReactToastify.css'
 import { useRouter } from 'next/navigation'
+import { ToastContainer, toast } from 'react-toastify'
 import {
   Dropdown,
   DropdownTrigger,
@@ -14,24 +16,48 @@ import {
   TableColumn,
   TableRow,
   TableCell,
+  DropdownSection,
 } from '@nextui-org/react'
 import { Eye, Trash2 } from 'lucide-react'
 import { getAllCustomers } from '@/app/useCases/customers/getAllCustomers'
 import { ICustomer } from '@/interfaces/customer'
+import { deleteCustomer } from '@/app/useCases/customers/deleteCustomer'
 
 export default function CustomersPage() {
   const [listCustomers, setListCustomers] = React.useState<ICustomer[]>([])
   const router = useRouter()
+
+  async function handleGetAllCustomers() {
+    try {
+      const response = await getAllCustomers()
+      setListCustomers(response)
+    } catch (error) {
+      toast.error('Problemas com API!', {
+        theme: 'colored',
+      })
+    }
+  }
+
+  async function handleDeleteCustomer(keys: React.Key) {
+    try {
+      await deleteCustomer(keys)
+      toast.success('Registro excluído', {
+        theme: 'colored',
+      })
+      handleGetAllCustomers()
+    } catch (error) {
+      toast.error('Problemas com API!', {
+        theme: 'colored',
+      })
+    }
+    console.log(keys)
+  }
 
   /* The `React.useEffect` hook in the provided code snippet is used to perform side effects in function
 components. In this case, it is making an asynchronous call to the `getAllCustomers` function when
 the component mounts (since the dependency array `[]` is empty, indicating that the effect should
 only run once after the initial render). */
   React.useEffect(() => {
-    async function handleGetAllCustomers() {
-      const response = await getAllCustomers()
-      setListCustomers(response)
-    }
     handleGetAllCustomers()
   }, [])
 
@@ -83,28 +109,35 @@ only run once after the initial render). */
                         <Trash2 />
                       </Button>
                     </DropdownTrigger>
-                    <DropdownMenu aria-label="Static Actions">
-                      <DropdownItem key="new">
-                        <section className="flex w-full justify-center">
-                          Deseja excluir?
-                        </section>
-                        <section className="mt-4 flex gap-2">
-                          <Button
-                            color="danger"
-                            variant="faded"
-                            aria-label="Visualizar Cliente"
-                          >
-                            Não
-                          </Button>
-                          <Button
-                            color="success"
-                            variant="faded"
-                            aria-label="Visualizar Cliente"
-                          >
-                            Sim
-                          </Button>
-                        </section>
-                      </DropdownItem>
+                    <DropdownMenu
+                      aria-label="Static Actions"
+                      onAction={(key: React.Key) => handleDeleteCustomer(key)}
+                    >
+                      <DropdownSection title="Confirma ação?" showDivider>
+                        <DropdownItem
+                          textValue="Botão excluir item"
+                          key={customer.id}
+                          shortcut=""
+                          description=""
+                          classNames={{
+                            base: 'bg-lime-500 text-white',
+                          }}
+                        >
+                          <span className="flex justify-center text-sm">
+                            Sim, excluir
+                          </span>
+                        </DropdownItem>
+                        <DropdownItem
+                          key="cancel"
+                          shortcut=""
+                          description=""
+                          textValue="Botão cancelar ação"
+                        >
+                          <span className="flex justify-center text-xs">
+                            Cancelar exclusão
+                          </span>
+                        </DropdownItem>
+                      </DropdownSection>
                     </DropdownMenu>
                   </Dropdown>
                   <Button
@@ -121,6 +154,7 @@ only run once after the initial render). */
           </TableBody>
         </Table>
       </section>
+      <ToastContainer />
     </main>
   )
 }

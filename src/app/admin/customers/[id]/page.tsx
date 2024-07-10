@@ -1,7 +1,7 @@
 'use client'
 import 'react-toastify/dist/ReactToastify.css'
 import { ICustomer } from '@/interfaces/customer'
-import { Button, Card, CardBody, Switch } from '@nextui-org/react'
+import { Button, Card, CardBody, Switch, Input } from '@nextui-org/react'
 import { useRouter } from 'next/navigation'
 import React from 'react'
 import { ToastContainer, toast } from 'react-toastify'
@@ -19,6 +19,7 @@ export default function CustomersDetailsPage({
 }) {
   const [customer, setCustomer] = React.useState<ICustomer | null>(null)
   const [isLoading, setIsLoading] = React.useState<boolean>(true)
+  const [isFetching, setIsFetching] = React.useState<boolean>(false)
   const router = useRouter()
 
   const handleGetCustomerByID = React.useCallback(async () => {
@@ -70,12 +71,22 @@ export default function CustomersDetailsPage({
           {!isLoading ? (
             <CardBody className="flex gap-3 p-6">
               <section className="text-xl">
-                <strong>Nome: </strong>
-                {customer?.name}
+                <Input
+                  type="text"
+                  label="Nome"
+                  variant="bordered"
+                  defaultValue={customer?.name}
+                  placeholder="Digite seu nome do cliente"
+                />
               </section>
               <section className="text-xl">
-                <strong>Função: </strong>
-                {customer?.role}
+                <Input
+                  type="text"
+                  label="Função"
+                  variant="bordered"
+                  defaultValue={customer?.role}
+                  placeholder="Digite a função do cliente"
+                />
               </section>
               <section className="text-xl">
                 <strong>Status: </strong>
@@ -87,6 +98,15 @@ export default function CustomersDetailsPage({
                   }
                 />
               </section>
+              <Button
+                size="lg"
+                isLoading={isFetching}
+                type="submit"
+                color="primary"
+                fullWidth
+              >
+                {!isFetching ? 'Atualizar' : ''}
+              </Button>
             </CardBody>
           ) : (
             <CardBody className="flex gap-3 p-6">

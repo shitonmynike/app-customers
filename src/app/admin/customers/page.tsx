@@ -25,12 +25,14 @@ import { deleteCustomer } from '@/app/useCases/customers/deleteCustomer'
 
 export default function CustomersPage() {
   const [listCustomers, setListCustomers] = React.useState<ICustomer[]>([])
+  const [isLoading, setIsLoading] = React.useState<boolean>(true)
   const router = useRouter()
 
   async function handleGetAllCustomers() {
     try {
       const response = await getAllCustomers()
       setListCustomers(response)
+      setIsLoading(false)
     } catch (error) {
       toast.error('Problemas com API!', {
         theme: 'colored',
@@ -62,7 +64,7 @@ only run once after the initial render). */
   }, [])
 
   return (
-    <main>
+    <main className="mb-40">
       <section id="HEADER" className="flex justify-between p-6">
         <section className="text-2xl font-semibold">Lista de clientes</section>
         <section>
@@ -85,10 +87,23 @@ only run once after the initial render). */
           <TableBody
             emptyContent={
               <section className="mb-6 flex w-full flex-col items-center">
-                <Image width={200} alt="NextUI hero Image" src="/no-data.jpg" />
-                <section className="text-sm font-bold">
-                  Nenhum cliente encontrado
-                </section>
+                {!isLoading && (
+                  <>
+                    <Image
+                      width={200}
+                      alt="NextUI hero Image"
+                      src="/no-data.jpg"
+                    />
+                    <section className="text-sm font-bold">
+                      Nenhum cliente encontrado
+                    </section>
+                  </>
+                )}
+                {isLoading && (
+                  <section className="text-sm font-bold">
+                    Carregando clientes...
+                  </section>
+                )}
               </section>
             }
           >
@@ -142,9 +157,12 @@ only run once after the initial render). */
                   </Dropdown>
                   <Button
                     isIconOnly
-                    color="warning"
+                    color="success"
                     variant="faded"
                     aria-label="Visualizar Cliente"
+                    onClick={() =>
+                      router.push(`/admin/customers/${customer.id}`)
+                    }
                   >
                     <Eye />
                   </Button>

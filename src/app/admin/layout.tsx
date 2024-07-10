@@ -6,7 +6,7 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <section className="relative h-screen bg-zinc-200">
+    <section className="relative h-screen overflow-y-auto bg-zinc-200">
       <NavBar />
       {children}
     </section>

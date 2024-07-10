@@ -7,6 +7,8 @@ import React from 'react'
 import { ToastContainer, toast } from 'react-toastify'
 import { getCustomerByID } from '@/app/useCases/customers/getCustomerByID'
 import { updateCustomerByID } from '@/app/useCases/customers/updateCustomerByID'
+import { useForm } from 'react-hook-form'
+import { TCustomer } from '@/app/schemas/schemasZod'
 
 type TCustomersDetailsPageProps = {
   id: string
@@ -21,6 +23,12 @@ export default function CustomersDetailsPage({
   const [isLoading, setIsLoading] = React.useState<boolean>(true)
   const [isFetching, setIsFetching] = React.useState<boolean>(false)
   const router = useRouter()
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<TCustomer>()
 
   const handleGetCustomerByID = React.useCallback(async () => {
     try {
@@ -47,6 +55,10 @@ export default function CustomersDetailsPage({
     }
   }
 
+  async function handleUpdateCustomer(data: TCustomer) {
+    console.log(data)
+  }
+
   React.useEffect(() => {
     handleGetCustomerByID()
   }, [handleGetCustomerByID])
@@ -70,43 +82,51 @@ export default function CustomersDetailsPage({
         <Card className="flex-1">
           {!isLoading ? (
             <CardBody className="flex gap-3 p-6">
-              <section className="text-xl">
-                <Input
-                  type="text"
-                  label="Nome"
-                  variant="bordered"
-                  defaultValue={customer?.name}
-                  placeholder="Digite seu nome do cliente"
-                />
-              </section>
-              <section className="text-xl">
-                <Input
-                  type="text"
-                  label="Função"
-                  variant="bordered"
-                  defaultValue={customer?.role}
-                  placeholder="Digite a função do cliente"
-                />
-              </section>
-              <section className="text-xl">
-                <strong>Status: </strong>
-                <Switch
-                  defaultSelected={customer?.status}
-                  aria-label="Status do cliente"
-                  onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                    handleUpdateStatus(e)
-                  }
-                />
-              </section>
-              <Button
-                size="lg"
-                isLoading={isFetching}
-                type="submit"
-                color="primary"
-                fullWidth
-              >
-                {!isFetching ? 'Atualizar' : ''}
-              </Button>
+              <form onSubmit={handleSubmit(handleUpdateCustomer)}>
+                <section className="text-xl">
+                  <Input
+                    type="text"
+                    label="Nome"
+                    variant="bordered"
+                    defaultValue={customer?.name}
+                    placeholder="Digite seu nome do cliente"
+                    {...register('name')}
+                  />
+                </section>
+                <section className="text-xl">
+                  <Input
+                    type="text"
+                    label="Função"
+                    variant="bordered"
+                    defaultValue={customer?.role}
+                    placeholder="Digite a função do cliente"
+                    {...register('role')}
+                  />
+                </section>
+                <section className="text-xl">
+                  <strong>Status: </strong>
+                  <Switch
+                    defaultSelected={customer?.status}
+                    aria-label="Status do cliente"
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                      handleUpdateStatus(e)
+                    }
+                  />
+                </section>
+                <section className="text-xl">
+                  <strong>Aceito termo: </strong>
+                  <Switch aria-label="Aceitou o termo" {...register('terms')} />
+                </section>
+                <Button
+                  size="lg"
+                  isLoading={isFetching}
+                  type="submit"
+                  color="primary"
+                  fullWidth
+                >
+                  {!isFetching ? 'Atualizar' : ''}
+                </Button>
+              </form>
             </CardBody>
           ) : (
             <CardBody className="flex gap-3 p-6">

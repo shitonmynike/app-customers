@@ -1,14 +1,16 @@
 'use client'
 import 'react-toastify/dist/ReactToastify.css'
-import { ICustomer } from '@/interfaces/customer'
+
 import { Button, Card, CardBody, Switch, Input } from '@nextui-org/react'
-import { useRouter } from 'next/navigation'
+
 import React from 'react'
 import { ToastContainer, toast } from 'react-toastify'
 import { getCustomerByID } from '@/app/useCases/customers/getCustomerByID'
 import { updateCustomerByID } from '@/app/useCases/customers/updateCustomerByID'
 import { useForm } from 'react-hook-form'
 import { TCustomer } from '@/app/schemas/schemasZod'
+import { useRouter } from 'next/navigation'
+import { DevTool } from '@hookform/devtools'
 
 type TCustomersDetailsPageProps = {
   id: string
@@ -19,16 +21,17 @@ export default function CustomersDetailsPage({
 }: {
   params: TCustomersDetailsPageProps
 }) {
-  const [customer, setCustomer] = React.useState<ICustomer | null>(null)
+  const [customer, setCustomer] = React.useState<TCustomer | null>(null)
   const [isLoading, setIsLoading] = React.useState<boolean>(true)
   const [isFetching, setIsFetching] = React.useState<boolean>(false)
   const router = useRouter()
 
   const {
+    control,
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<TCustomer>()
+  } = useForm<TCustomer>({ mode: 'onChange' })
 
   const handleGetCustomerByID = React.useCallback(async () => {
     try {
@@ -135,6 +138,7 @@ export default function CustomersDetailsPage({
           )}
         </Card>
       </section>
+      <DevTool control={control} />
       <ToastContainer />
     </main>
   )

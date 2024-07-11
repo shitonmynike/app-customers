@@ -1,16 +1,22 @@
 'use client'
 import 'react-toastify/dist/ReactToastify.css'
-
 import { Button, Card, CardBody, Switch, Input } from '@nextui-org/react'
-
 import React from 'react'
 import { ToastContainer, toast } from 'react-toastify'
 import { getCustomerByID } from '@/app/useCases/customers/getCustomerByID'
 import { updateCustomerByID } from '@/app/useCases/customers/updateCustomerByID'
 import { useForm } from 'react-hook-form'
-import { TCustomer } from '@/app/schemas/schemasZod'
+import { createCustomerSchema, TCustomer } from '@/app/schemas/schemasZod'
 import { useRouter } from 'next/navigation'
-import { DevTool } from '@hookform/devtools'
+import dynamic from 'next/dynamic'
+import { zodResolver } from '@hookform/resolvers/zod'
+
+const DevTool = dynamic(
+  () => import('@hookform/devtools').then((mod) => mod.DevTool),
+  {
+    ssr: false,
+  },
+)
 
 type TCustomersDetailsPageProps = {
   id: string
@@ -29,21 +35,31 @@ export default function CustomersDetailsPage({
   const {
     control,
     register,
+    setValue,
     handleSubmit,
     formState: { errors },
-  } = useForm<TCustomer>({ mode: 'onChange' })
+  } = useForm<TCustomer>({
+    mode: 'onChange',
+    resolver: zodResolver(createCustomerSchema),
+    defaultValues: {
+      terms: false,
+    },
+  })
 
   const handleGetCustomerByID = React.useCallback(async () => {
     try {
-      const response = await getCustomerByID(params.id)
+      const response: TCustomer = await getCustomerByID(params.id)
       setCustomer(response)
+      setValue('name', response.name)
+      setValue('role', response.role)
+      setValue('terms', response.terms)
       setIsLoading(false)
     } catch (error) {
       toast.error('Problemas com API!', {
         theme: 'colored',
       })
     }
-  }, [params.id])
+  }, [params.id, setValue])
 
   async function handleUpdateStatus(e: React.ChangeEvent<HTMLInputElement>) {
     try {
@@ -88,8 +104,11 @@ export default function CustomersDetailsPage({
               <form onSubmit={handleSubmit(handleUpdateCustomer)}>
                 <section className="text-xl">
                   <Input
+                    autoComplete="off"
                     type="text"
                     label="Nome"
+                    isInvalid={!!errors.name?.message}
+                    errorMessage={errors.name?.message}
                     variant="bordered"
                     defaultValue={customer?.name}
                     placeholder="Digite seu nome do cliente"
@@ -98,9 +117,12 @@ export default function CustomersDetailsPage({
                 </section>
                 <section className="text-xl">
                   <Input
+                    autoComplete="off"
                     type="text"
                     label="Função"
                     variant="bordered"
+                    isInvalid={!!errors.role?.message}
+                    errorMessage={errors.role?.message}
                     defaultValue={customer?.role}
                     placeholder="Digite a função do cliente"
                     {...register('role')}

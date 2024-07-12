@@ -24,10 +24,10 @@
   ],
   "customers": [
     {
-      "id": 8,
-      "name": "Juliana Almeida",
+      "name": "Juliana Almeida qwewqewqewqwe",
       "role": "Gerente",
-      "status": false
+      "terms": false,
+      "id": 8
     },
     {
       "id": 9,

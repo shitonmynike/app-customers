@@ -8,15 +8,16 @@ import { updateCustomerByID } from '@/app/useCases/customers/updateCustomerByID'
 import { useForm } from 'react-hook-form'
 import { createCustomerSchema, TCustomer } from '@/app/schemas/schemasZod'
 import { useRouter } from 'next/navigation'
-import dynamic from 'next/dynamic'
+// import dynamic from 'next/dynamic'
 import { zodResolver } from '@hookform/resolvers/zod'
-
-const DevTool = dynamic(
-  () => import('@hookform/devtools').then((mod) => mod.DevTool),
-  {
-    ssr: false,
-  },
-)
+import { updateCustomerStatusByID } from '@/app/useCases/customers/updateCustomerStatusByID'
+import { DevTool } from '@hookform/devtools'
+// const DevTool = dynamic(
+//   () => import('@hookform/devtools').then((mod) => mod.DevTool),
+//   {
+//     ssr: false,
+//   },
+// )
 
 type TCustomersDetailsPageProps = {
   id: string
@@ -63,7 +64,7 @@ export default function CustomersDetailsPage({
 
   async function handleUpdateStatus(e: React.ChangeEvent<HTMLInputElement>) {
     try {
-      await updateCustomerByID(params.id, e.target.checked)
+      await updateCustomerStatusByID(params.id, e.target.checked)
       toast.success('Status atualizado', {
         theme: 'colored',
       })
@@ -75,7 +76,19 @@ export default function CustomersDetailsPage({
   }
 
   async function handleUpdateCustomer(data: TCustomer) {
-    console.log(data)
+    try {
+      setIsFetching(true)
+      await updateCustomerByID(params.id, data)
+      toast.success('Cliente atualizado', {
+        theme: 'colored',
+      })
+      setIsFetching(false)
+    } catch (error) {
+      setIsFetching(false)
+      toast.error('Problemas com API!', {
+        theme: 'colored',
+      })
+    }
   }
 
   React.useEffect(() => {

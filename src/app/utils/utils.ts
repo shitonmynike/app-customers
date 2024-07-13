@@ -1,5 +1,5 @@
 import { IViaCEP, IViaCEPError } from '@/interfaces/cep'
-import { api } from '../config/axios'
+import axios from 'axios'
 
 export function maskDocument(documentType: string, value: string) {
   value = value.replace(/\D/g, '')
@@ -47,7 +47,25 @@ export async function getAddressByCEP(
 ): Promise<IViaCEP | IViaCEPError> {
   const clearCEP = cep.replace(/\D/g, '')
 
-  const response = await api.get(`https://viacep.com.br/ws/${clearCEP}/json/`)
+  const response = await axios.get(`https://viacep.com.br/ws/${clearCEP}/json/`)
 
   return response.data
+}
+
+export function maskPhone(phone: string): string {
+  const clearPhone = phone.replace(/\D/g, '').slice(0, 11) // Remove não-números e limita a 11 dígitos
+
+  const parts = []
+
+  if (clearPhone.length > 0) {
+    parts.push(`(${clearPhone.substring(0, 2)}`)
+  }
+  if (clearPhone.length > 2) {
+    parts.push(`) ${clearPhone.substring(2, 7)}`)
+  }
+  if (clearPhone.length > 7) {
+    parts.push(`-${clearPhone.substring(7, 11)}`)
+  }
+
+  return parts.join('')
 }
